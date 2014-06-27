@@ -7,8 +7,6 @@ package aliados.vs.enemigos;
 
 import java.util.Scanner;
 
-
-
 /**
  *
  * @author Dinier
@@ -20,22 +18,15 @@ public class AliadosVsEnemigos {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-String j1;
-String j2;
-char c='s';
-Scanner teclado= new Scanner(System.in);
-ClsMetodos o = new ClsMetodos(); 
-       System.out.println("Digite el nombre del Jugador 1");
-            j1=teclado.nextLine();
-            System.out.println("Digite el nombre del Jugador 2");
-            j2=teclado.nextLine(); 
-          do{
-              
-             o.jugar();
-             o.CantidadDePartidasJugadas();
-            System.out.println("Desea jugar otra partida S/N ");
-            c = teclado.nextLine().charAt(0);
-          }while(c=='s'||c=='S');
-        
+        String j1;
+        String j2;
+        Scanner teclado = new Scanner(System.in);
+        ClsMetodos o = new ClsMetodos();
+        System.out.println("Digite el nombre del Jugador 1");
+        j1 = teclado.nextLine();
+        System.out.println("Digite el nombre del Jugador 2");
+        j2 = teclado.nextLine();
+        o.jugar();
+
     }
 }

@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class ClsMetodos {
 
-    private int p = 0;
+    private int p = 1;
     private int turno = 1;
     private Scanner teclado;
     private char[][] matriz;
@@ -24,9 +24,14 @@ public class ClsMetodos {
     private int p1, p2, a1, a2, e1, e2;
     private char jug = 'a';
     private char jug2 = 'a';
-    private int cont = 0;
+    private int contA = 0;
+    private int contE = 0;
+    private char c='s';
+    private char rendirse='S';
+    private int partjug=0;
+    private int partjug2=0;
 
-    public void cargar(int cant, int largo, int ancho) {
+ public void cargar(int cant, int largo, int ancho) {
 
         Random random = new Random();
 
@@ -97,7 +102,7 @@ public class ClsMetodos {
 
     }
 
-    public void AcertarBlancoAliado() {
+ public void AcertarBlancoAliado() {
 
         
         if (matriz[a1][a2] == 'A') {
@@ -106,13 +111,13 @@ public class ClsMetodos {
             turno = 0;
             SumarAliadosDestruidos();
             imprirmatriz();
-            imp(matriz, "Enemigo", "Aliado");
+            imp(matriz, "Enemigo", "Aliado",matriz2);
         }
         FallarBlancoAliado();
 
     }
 
-    public void FallarBlancoAliado() {
+ public void FallarBlancoAliado() {
 
         System.out.println("Ataque fallado");
         matriz[a1][a2] =' ';
@@ -121,28 +126,27 @@ public class ClsMetodos {
 
     }
 
-    public void FallarBlancoEnemigo() {
+ public void FallarBlancoEnemigo() {
         System.out.println("Ataque fallado");
         matriz[a1][a2] =' ';
         turno = 0;
         Turno();
     }
 
-    public void AcertarBlancoEnemigo() {
+ public void AcertarBlancoEnemigo() {
 
-        if (matriz2[e1][e2] != 0) {
+        if (matriz2[e1][e2] == 'E') {
             System.out.println("Ataque acertado");
-            matriz[a1][a2] =' ';
+            matriz2[e1][e2] =' ';
             turno = 1;
             SumarEnemigosDestruidos();
             imprirmatriz();
-            
-            Turno();
+            imp(matriz2, "Aliado", "Enemigo",matriz);
         }
         FallarBlancoEnemigo();
     }
 
-    public void EscogerCeldaAliado() {
+ public void EscogerCeldaAliado() {
         
         System.out.println("Digite la posicion en la que desea atacar");
         a1 = Integer.parseInt(teclado.nextLine());
@@ -150,6 +154,7 @@ public class ClsMetodos {
         if(matriz[a1][a2]==' ')
         {
             System.out.println("El blanco ya fue atacado");
+            Rendirse(matriz2);
             EscogerCeldaAliado();
         }else
         {
@@ -157,13 +162,14 @@ public class ClsMetodos {
         }
     }
 
-    public void EscogerCeldaEnemigo() {
+ public void EscogerCeldaEnemigo() {
         System.out.println("Digite la posicion en la que desea atacar");
         e1 = Integer.parseInt(teclado.nextLine());
         e2 = Integer.parseInt(teclado.nextLine());
         if(matriz2[e1][e2]==' ')
         {
             System.out.println("El blanco ya fue atacado");
+            Rendirse(matriz);
             EscogerCeldaEnemigo();
         }else
         {
@@ -171,25 +177,25 @@ public class ClsMetodos {
         }
     }
 
-    public void EscogerJugadorAliado() {
+ public void EscogerJugadorAliado() {
         turno = 1;
         jug = 'A';
         jug2 = 'E';
 
     }
 
-    public void EscogerJugadorEnemigo() {
+ public void EscogerJugadorEnemigo() {
         turno = 0;
         jug = 'E';
         jug2 = 'A';
     }
 
-    public void CantidadDePartidasJugadas() {
-        p++;
+ public void CantidadDePartidasJugadas() {
+        System.out.println("Cantidad de partidas jugadas: "+ p);
 
     }
 
-    public void Turno() {
+ public void Turno() {
         if (turno == 1) {
             EscogerCeldaEnemigo();
 
@@ -198,28 +204,43 @@ public class ClsMetodos {
         }
     }
 
-    public void Ganador(String jugador) {
-        System.out.println("El ganador es: "+jugador);       
+ public void Ganador(String jugador) {
+        System.out.println("El ganador es: "+jugador); 
+        
     }
 
-    public void Perdedor(String jugador) {
+ public void Perdedor(String jugador) {
         System.out.println("El perdedor es: "+jugador);
-        System.exit(0);
+        TotalDeAliadosDestruidos();
+        TotalDeEnemigosDestruidos();
+        IniciarNuevaPartida();
+        
     }
 
-    public void SumarAliadosDestruidos() {
+ public void SumarAliadosDestruidos() {
        
-        cont++;
-        System.out.println("AliadosDestruidos("+cont+")");
+        contA++;
+       
+     
+    }
+    
+ public void TotalDeAliadosDestruidos() {
+        System.out.println("TotalDeAliadosDestruidos("+contA+")");
+    }
+    
+ public void TotalDeEnemigosDestruidos() {
+       
+        
+        System.out.println("TotalDeEnemigosDestruidos("+contE+")");
     }
 
-    public void SumarEnemigosDestruidos() {
-        cont++;
-      System.out.println("EnemigosDestruidos("+cont+")");
+ public void SumarEnemigosDestruidos() {
+        contE++;
+      
 
     }
 
-    public void jugar() {
+ public void jugar() {
         String j1, j2;
         int opcion;
         int c = 1;
@@ -261,7 +282,7 @@ public class ClsMetodos {
 
     }
 
-    public void imprirmatriz() {
+ public void imprirmatriz() {
         for (int f = 0; f < matriz.length; f++) {
             //NAVEGA POR COLUMNAS
             for (int c = 0; c < matriz[f].length; c++) {
@@ -279,13 +300,15 @@ public class ClsMetodos {
         }
         System.out.println();
     }
-    public void imp(char[][] mat, String jugador1, String jugador2)
+    
+ public void imp(char[][] mat, String jugador1, String jugador2,char[][] mat2)
     {
     for (int f = 0; f < mat.length; f++) {
             for (int c = 0; c < mat[f].length; c++) {
                 if(mat[f][c]==' ' || mat[f][c]==0){
                 
                 }else{
+                    Rendirse(mat2);
                     Turno();
                 }
             }
@@ -293,5 +316,115 @@ public class ClsMetodos {
         Ganador(jugador1);
         Perdedor(jugador2);
     }
+    
+ public void	Rendirse(char[][] mat)
+   {
+       
+       
+       System.out.println("Desea rendirse S para si y cualquier tecla para no");
+        rendirse=teclado.nextLine().charAt(0);
+        
+        
+        if(rendirse=='s'||rendirse=='S')
+        {
+            
+            p--;
+            for (int f = 0; f < mat.length; f++) {
+            for (int c = 0; c < mat[f].length; c++) {
+               mat[f][c]=' ';
+            }}
+           if(mat==matriz)
+        {
+         imp(matriz, "Enemigo", "Aliado",matriz2);   
+        }
+          imp(matriz2, "Aliado", "Enemigo",matriz); 
+        } 
+        }
+        
+   
+ public void IniciarNuevaPartida()  
+ {
+            boolean x=true;  
+            if(jug=='A'){
+             
+                for (int f = 0; f < matriz2.length; f++) {
+                        for (int c = 0; c < matriz2[f].length; c++) {
+                            if(matriz2[f][c]==' ' || matriz2[f][c]==0 && x){
+                                x=true;
+                            }else{
+                            x=false;
+                            }
+                        }
+                }
+                if(x){
+                    partjug++;
+                }else{
+                    partjug2++;
+                }
+             }else{
+             
+                for (int f = 0; f < matriz.length; f++) {
+                        for (int c = 0; c < matriz[f].length; c++) {
+                            if(matriz[f][c]==' ' || matriz[f][c]==0 && x){
+                                x=true;
+                            }else{
+                            x=false;
+                            }
+                        }
+                }
+                if(x){
+                    partjug2++;
+                }else{
+                    partjug++;
+                }
+             }
+            System.out.println("Desea jugar otra partida S/N ");
+            c = teclado.nextLine().charAt(0);
+            if(c=='s'||c=='S')
+            {
+             
+             contA = 0;
+             contE = 0;
+             p++;
+           
+                jugar();
+            }
+            
+            VerEstadisticas();
+            System.exit(0);
+      
+  
+ } 
+ 
+ 
+ public void CantidadDePartidasGanadasJugador1()
+{
+    System.out.println("Cantidad de partidas ganadas jugador 1: "+partjug);
+}
+
+ public void CantidadDePartidasGanadasJugador2()
+{
+System.out.println("Cantidad de partidas ganadas jugador 2: "+partjug2);
+}
+
+ public void CantidadDePartidasPerdidasJugador1()
+{
+System.out.println("Cantidad de partidas perdidas jugador 1: "+partjug2);
+}
+
+ public void CantidadDePartidasPerdidasJugador2()
+{
+System.out.println("Cantidad de partidas perdidas jugador 2: "+partjug);
+}
+ 
+ public void VerEstadisticas()
+{
+    System.out.println("Estadisticas:");
+    CantidadDePartidasJugadas();
+    CantidadDePartidasGanadasJugador1();
+    CantidadDePartidasGanadasJugador2();
+    CantidadDePartidasPerdidasJugador1();
+    CantidadDePartidasPerdidasJugador2();
+}
 
 }
